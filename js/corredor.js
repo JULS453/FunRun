@@ -36,7 +36,7 @@ const CAM_Z = 18;
 let isJumping = false; 
 let velocityY = 0; 
 const gravity = 0.02; 
-const FuerzaSalto = 0.4; 
+const FuerzaSalto = 0.45; 
 const raycaster = new THREE.Raycaster(); 
 const downVector = new THREE.Vector3(0, -1, 0); 
 
@@ -99,7 +99,7 @@ function init() {
         
         // Ajuste de escala: Los modelos de internet suelen ser gigantes o diminutos
         // Prueba con estos valores y ajusta según necesites
-        muroModel.scale.set(0.05, 0.03, 0.05);
+        muroModel.scale.set(0.06, 0.04, 0.05);
         
         // Hacer que el modelo proyecte sombras
         muroModel.traverse((child) => {
@@ -117,7 +117,7 @@ function init() {
         
         // Ajuste de escala: Los modelos de internet suelen ser gigantes o diminutos
         // Prueba con estos valores y ajusta según necesites
-        vallaModel.scale.set(1, 1, 1); 
+        vallaModel.scale.set(2, 2, 2); 
         
         // Hacer que el modelo proyecte sombras
         vallaModel.traverse((child) => {
