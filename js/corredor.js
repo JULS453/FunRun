@@ -40,6 +40,26 @@ const FuerzaSalto = 0.4;
 const raycaster = new THREE.Raycaster(); 
 const downVector = new THREE.Vector3(0, -1, 0); 
 
+// --- GESTIÓN DE CARGA ---
+const loadingScreen = document.getElementById('loadingScreen');
+const progressBar = document.getElementById('progressBar');
+const loadingText = document.getElementById('loadingText');
+
+const manager = new THREE.LoadingManager();
+
+manager.onProgress = function (url, itemsLoaded, itemsTotal) {
+    const percentage = (itemsLoaded / itemsTotal) * 100;
+    if (progressBar) progressBar.style.width = percentage + '%';
+    if (loadingText) loadingText.innerText = Math.round(percentage) + '%';
+};
+
+manager.onLoad = function () {
+    // Cuando todo termine, ocultamos la carga
+    setTimeout(() => {
+        loadingScreen.style.display = 'none';
+    }, 500);
+};
+
 // --- Referencias al HTML ---
 const distText = document.getElementById('distancia');
 const coinsText = document.getElementById('monedas');
@@ -55,14 +75,14 @@ render();
 
 function init() {
 
-    const loaderGLTF = new THREE.GLTFLoader();
+    const loaderGLTF = new THREE.GLTFLoader(manager);
 
     loaderGLTF.load('./modelos/traffic_cone.glb', (gltf) => {
         conoModel = gltf.scene;
         
         // Ajuste de escala: Los modelos de internet suelen ser gigantes o diminutos
         // Prueba con estos valores y ajusta según necesites
-        conoModel.scale.set(7, 7, 5); 
+        conoModel.scale.set(5, 5, 5); 
         
         // Hacer que el modelo proyecte sombras
         conoModel.traverse((child) => {
@@ -97,7 +117,7 @@ function init() {
         
         // Ajuste de escala: Los modelos de internet suelen ser gigantes o diminutos
         // Prueba con estos valores y ajusta según necesites
-        vallaModel.scale.set(3, 5, 3.5); 
+        vallaModel.scale.set(1, 1, 1); 
         
         // Hacer que el modelo proyecte sombras
         vallaModel.traverse((child) => {
@@ -197,7 +217,7 @@ function startGame() {
 
 function loadScene() {
 
-    const loader = new THREE.TextureLoader();
+    const loader = new THREE.TextureLoader(manager);
 
     // --- CARGA DE TEXTURAS ---
     const sueloTex = loader.load('./texturas/suelo.webp');
@@ -272,7 +292,7 @@ function createMesh(geo, color, x, y, z, tipo) {
     else if (tipo === 'VALLA' && vallaModel) {
         objeto = vallaModel.clone();
         objeto.position.set(x, 0, z);
-        objeto.rotation.y = Math.PI / 2;
+        
     } 
     else if (tipo === 'TRAILER' && trailerModel) {
         objeto = trailerModel.clone();

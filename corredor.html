@@ -16,6 +16,32 @@
             height: 100vh;
         }
         /* Interfaz */
+
+        #loadingScreen {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #1a1a2e;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 20; /* Por encima de la pantalla de inicio */
+            color: white;
+        }
+        #progressContainer {
+            width: 300px;
+            height: 20px;
+            background: #333;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+        #progressBar {
+            width: 0%;
+            height: 100%;
+            background: #00ffcc;
+            transition: width 0.3s;
+        } 
         #ui {
             position: absolute;
             top: 20px;
@@ -72,6 +98,14 @@
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
 </head>
 <body>
+
+    <div id="loadingScreen">
+    <h1>CARGANDO ASSETS...</h1>
+    <div id="progressContainer">
+        <div id="progressBar"></div>
+    </div>
+    <p id="loadingText">0%</p>
+    </div> 
 
     <div id="ui">
         <div>Distancia: <span id="distancia">0</span> m</div>
