@@ -57,7 +57,7 @@ function init() {
 
     const loaderGLTF = new THREE.GLTFLoader();
 
-    loaderGLTF.load('./modelos/road_cone/scene.gltf', (gltf) => {
+    loaderGLTF.load('./modelos/traffic_cone.glb', (gltf) => {
         conoModel = gltf.scene;
         
         // Ajuste de escala: Los modelos de internet suelen ser gigantes o diminutos
@@ -74,7 +74,7 @@ function init() {
         
     });
 
-    loaderGLTF.load('./modelos/t_wall_barrier/scene.gltf', (gltf) => {
+    loaderGLTF.load('./modelos/t_wall_barrier.glb', (gltf) => {
         muroModel = gltf.scene;
         
         // Ajuste de escala: Los modelos de internet suelen ser gigantes o diminutos
@@ -92,7 +92,7 @@ function init() {
       
     });
 
-    loaderGLTF.load('./modelos/traffic_barrier/scene.gltf', (gltf) => {
+    loaderGLTF.load('./modelos/concrete_road_barrier.glb', (gltf) => {
         vallaModel = gltf.scene;
         
         // Ajuste de escala: Los modelos de internet suelen ser gigantes o diminutos
@@ -110,7 +110,7 @@ function init() {
       
     });
 
-    loaderGLTF.load('./modelos/20ft_container/scene.gltf', (gltf) => {
+    loaderGLTF.load('./modelos/20ft_container.glb', (gltf) => {
         trailerModel = gltf.scene;
         
         // Ajuste de escala: Los modelos de internet suelen ser gigantes o diminutos
@@ -200,10 +200,10 @@ function loadScene() {
     const loader = new THREE.TextureLoader();
 
     // --- CARGA DE TEXTURAS ---
-    const sueloTex = loader.load('./texturas/suelo.jpg');
-    const paredTex = loader.load('./texturas/pared.jpg');
-    const cieloTex = loader.load('./texturas/cielo.jpg');
-    lavaTex = loader.load('./texturas/lava.jpg');
+    const sueloTex = loader.load('./texturas/suelo.webp');
+    const paredTex = loader.load('./texturas/pared.webp');
+    const cieloTex = loader.load('./texturas/cielo.webp');
+    lavaTex = loader.load('./texturas/lava.webp');
 
     // Configuración de repetición para que no se vean estiradas
     sueloTex.wrapS = sueloTex.wrapT = THREE.RepeatWrapping;
