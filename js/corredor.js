@@ -1,15 +1,15 @@
-// 1. VARIABLES GLOBALES
+//VARIABLES GLOBALES
 var renderer, scene, camera; 
 var clock = new THREE.Clock();
 
 // Variables de estado del juego
-let juegoIniciado = false; // Controla si el jugador ha pulsado "Empezar"
+let juegoIniciado = false; // Controla si el jugador ha pulsado empezar
 let gameOver = false; 
 
 // Constantes dificultad
 let velocidadJuego = 0.3; 
 const MultVelocidad = 0.00005; 
-const velocidadMax = 3.5; 
+const velocidadMax = 20; 
 let framesSinceLastSpawn = 0; 
 let distancia = 0; 
 let monedasReco = 0; 
@@ -18,9 +18,9 @@ let monedasReco = 0;
 let vidas = 3; 
 let invulnerableTimer = 0; 
 
-// --- Elementos del Escenario ---
+//Elementos del Escenario 
 let player; 
-let mixer; // El encargado de reproducir las animaciones
+let mixer; // encargado de reproducir las animaciones
 let lavaTex;
 let conoModel, trailerModel, vallaModel, muroModel;
 let obstacles = []; 
@@ -32,7 +32,7 @@ let currentLane = 0;
 const CAM_Y = 12; 
 const CAM_Z = 18;
 
-// --- Físicas ---
+//Físicas
 let isJumping = false; 
 let velocityY = 0; 
 const gravity = 0.02; 
@@ -40,7 +40,7 @@ const FuerzaSalto = 0.45;
 const raycaster = new THREE.Raycaster(); 
 const downVector = new THREE.Vector3(0, -1, 0); 
 
-// --- GESTIÓN DE CARGA ---
+// CARGA
 const loadingScreen = document.getElementById('loadingScreen');
 const progressBar = document.getElementById('progressBar');
 const loadingText = document.getElementById('loadingText');
@@ -60,15 +60,14 @@ manager.onLoad = function () {
     }, 500);
 };
 
-// --- Referencias al HTML ---
+//HTML
 const distText = document.getElementById('distancia');
 const coinsText = document.getElementById('monedas');
 const gameOverScreen = document.getElementById('gameOverScreen');
 let livesText; 
 
-// ==========================================
-// 2. INICIALIZACIÓN
-// ==========================================
+//INICIALIZACIÓN
+
 init();
 loadScene();
 render();
@@ -80,11 +79,11 @@ function init() {
     loaderGLTF.load('./modelos/traffic_cone.glb', (gltf) => {
         conoModel = gltf.scene;
         
-        // Ajuste de escala: Los modelos de internet suelen ser gigantes o diminutos
-        // Prueba con estos valores y ajusta según necesites
+        // Ajuste de escala
+        
         conoModel.scale.set(5, 5, 5); 
         
-        // Hacer que el modelo proyecte sombras
+        //modelo proyecte sombras
         conoModel.traverse((child) => {
             if (child.isMesh) {
                 child.castShadow = true;
@@ -97,11 +96,10 @@ function init() {
     loaderGLTF.load('./modelos/t_wall_barrier.glb', (gltf) => {
         muroModel = gltf.scene;
         
-        // Ajuste de escala: Los modelos de internet suelen ser gigantes o diminutos
-        // Prueba con estos valores y ajusta según necesites
+        // Ajuste de escala
         muroModel.scale.set(0.06, 0.04, 0.05);
         
-        // Hacer que el modelo proyecte sombras
+        // modelo proyecte sombras
         muroModel.traverse((child) => {
             if (child.isMesh) {
                 child.castShadow = true;
@@ -115,11 +113,10 @@ function init() {
     loaderGLTF.load('./modelos/concrete_road_barrier.glb', (gltf) => {
         vallaModel = gltf.scene;
         
-        // Ajuste de escala: Los modelos de internet suelen ser gigantes o diminutos
-        // Prueba con estos valores y ajusta según necesites
+        // Ajuste de escala
         vallaModel.scale.set(2, 2, 2); 
         
-        // Hacer que el modelo proyecte sombras
+        //modelo proyecte sombras
         vallaModel.traverse((child) => {
             if (child.isMesh) {
                 child.castShadow = true;
@@ -133,11 +130,10 @@ function init() {
     loaderGLTF.load('./modelos/20ft_container.glb', (gltf) => {
         trailerModel = gltf.scene;
         
-        // Ajuste de escala: Los modelos de internet suelen ser gigantes o diminutos
-        // Prueba con estos valores y ajusta según necesites
+        // Ajuste de escala
         trailerModel.scale.set(2, 1.5, 8); 
         
-        // Hacer que el modelo proyecte sombras
+        //modelo proyecte sombras
         trailerModel.traverse((child) => {
             if (child.isMesh) {
                 child.castShadow = true;
@@ -155,13 +151,12 @@ function init() {
     player.rotation.y = Math.PI;
     scene.add(player);
 
-    // --- CONFIGURAR ANIMACIÓN ---
-    // Comprobamos si el modelo tiene animaciones
+    //CONFIGURAR ANIMACIÓN
+    
     if (gltf.animations && gltf.animations.length > 0) {
         mixer = new THREE.AnimationMixer(player);
         
-        // Normalmente la animación 0 es la de "Idle" o "Run". 
-        // Si sabes el nombre, puedes usar THREE.AnimationClip.findByName(gltf.animations, 'Run')
+        
         const action = mixer.clipAction(gltf.animations[0]); 
         action.play();
     }
@@ -171,7 +166,7 @@ function init() {
     });
 });
 
-    // Inyectar contador de vidas
+    //contador de vidas
     const ui = document.getElementById('ui');
     if (ui && !document.getElementById('vidas')) {
         const vidasDiv = document.createElement('div');
@@ -219,13 +214,13 @@ function loadScene() {
 
     const loader = new THREE.TextureLoader(manager);
 
-    // --- CARGA DE TEXTURAS ---
+    //CARGA DE TEXTURAS
     const sueloTex = loader.load('./texturas/suelo.webp');
     const paredTex = loader.load('./texturas/pared.webp');
     const cieloTex = loader.load('./texturas/cielo.webp');
     lavaTex = loader.load('./texturas/lava.webp');
 
-    // Configuración de repetición para que no se vean estiradas
+    
     sueloTex.wrapS = sueloTex.wrapT = THREE.RepeatWrapping;
     sueloTex.repeat.set(2, 50); // El suelo se repite 50 veces a lo largo
 
@@ -234,14 +229,15 @@ function loadScene() {
     
     lavaTex.wrapS = lavaTex.wrapT = THREE.RepeatWrapping;
     lavaTex.repeat.set(1, 2); 
-    // --- LUCES ---
+
+    //LUCES
     scene.add(new THREE.AmbientLight(0xffffff, 0.6)); // Luz ambiental más clara
     const light = new THREE.DirectionalLight(0xffffff, 1.0);
     light.position.set(10, 30, 10);
     light.castShadow = true;
     scene.add(light);
 
-    // --- SUELO ---
+    // SUELO
     const ground = new THREE.Mesh(
         new THREE.PlaneGeometry(laneWidth * 3 + 2, 1000),
         new THREE.MeshPhongMaterial({ map: sueloTex })
@@ -251,7 +247,7 @@ function loadScene() {
     ground.receiveShadow = true;
     scene.add(ground);
 
-    // --- PAREDES ---
+    //PAREDES
     const wallMat = new THREE.MeshPhongMaterial({ map: paredTex });
     const wallGeo = new THREE.BoxGeometry(2, 10, 1000); 
     
@@ -264,11 +260,11 @@ function loadScene() {
     scene.add(ground.rightWall);
     scene.groundObj = ground; 
 
-    // --- CIELO
+    //CIELO
     const skyGeo = new THREE.SphereGeometry(250, 32, 32);
     const skyMat = new THREE.MeshBasicMaterial({
         map: cieloTex,
-        side: THREE.BackSide // Para que la textura se vea desde adentro
+        side: THREE.BackSide
     });
     const sky = new THREE.Mesh(skyGeo, skyMat);
     scene.add(sky);
@@ -277,14 +273,14 @@ function loadScene() {
    
 }
 
-// ==========================================
-// 3. FUNCIONES DE GENERACIÓN
-// ==========================================
+
+// FUNCIONES DE GENERACIÓN
+
 
 function createMesh(geo, color, x, y, z, tipo) {
     let objeto;
 
-    // Lógica de selección de modelo
+    //selección de modelo
     if (tipo === 'CONO' && conoModel) {
         objeto = conoModel.clone();
         objeto.position.set(x, 0, z);
@@ -345,7 +341,7 @@ function spawnPit(x, z) {
 function spawnPattern() {
     const zPos = -220;
     
-    // 1. Lógica de Vidas Extra (Mantenida)
+    //Vidas Extra
     if (Math.random() < 0.005) {
         let randomLane = (Math.floor(Math.random() * 3) - 1) * laneWidth;
         let lifeItem = new THREE.Mesh(new THREE.OctahedronGeometry(0.6), new THREE.MeshPhongMaterial({ color: 0xff0000, emissive: 0x550000 }));
@@ -359,7 +355,7 @@ function spawnPattern() {
     switch (patternType) {
         case 0: // Vagón largo solitario + Monedas
             let laneA = (Math.floor(Math.random() * 3) - 1) * laneWidth;
-            // Usamos 'TRAILER' para el objeto largo
+            
             createMesh(new THREE.BoxGeometry(2.8, 3, 60), 0x16213e, laneA, 1.5, zPos, 'TRAILER');
             spawnCoin(laneA, 4.5, zPos + 20);
             spawnCoin(laneA, 4.5, zPos);
@@ -383,7 +379,7 @@ function spawnPattern() {
             }
             break;
 
-        case 3: // Solo un foso (No lleva modelo 3D)
+        case 3: // Solo un foso
             let laneC = (Math.floor(Math.random() * 3) - 1) * laneWidth;
             spawnPit(laneC, zPos);
             break;
@@ -394,7 +390,7 @@ function spawnPattern() {
                 if (i !== safeLane) {
                     spawnPit(i * laneWidth, zPos);
                 } else {
-                    // El obstáculo naranja pequeño ahora es un 'CONO'
+                    
                     createMesh(new THREE.BoxGeometry(3, 3, 1), 0xffa500, i * laneWidth, 1.5, zPos, 'CONO');
                     spawnCoin(i * laneWidth, 3.5, zPos);
                 }
@@ -410,7 +406,7 @@ function spawnPattern() {
             break;
 
         case 6: // Vallas en zigzag
-            // Usamos 'VALLA'
+           
             createMesh(new THREE.BoxGeometry(3, 1.5, 1), 0xffa500, -laneWidth, 0.75, zPos + 10, 'VALLA');
             createMesh(new THREE.BoxGeometry(3, 1.5, 1), 0xffa500, 0, 0.75, zPos, 'VALLA');
             createMesh(new THREE.BoxGeometry(3, 1.5, 1), 0xffa500, laneWidth, 0.75, zPos - 10, 'VALLA');
@@ -436,9 +432,9 @@ function spawnPattern() {
     }
 }
 
-// ==========================================
-// 4. BUCLE PRINCIPAL
-// ==========================================
+
+//BUCLE PRINCIPAL
+
 
 function update() {
     if (!juegoIniciado || gameOver || !player) return; 
@@ -450,11 +446,11 @@ function update() {
     // MOVIMIENTO LATERAL
     player.position.x += (currentLane * laneWidth - player.position.x) * 0.25; 
 
-    // 2. DETECCIÓN DE SUELO (RAYCASTER MEJORADO)
+    //DETECCIÓN DE SUELO
     raycaster.set(player.position, downVector);
     let floorItems = [...obstacles, ...pits];
     
-    // CRÍTICO: Añadimos "true" para que detecte mallas dentro de modelos GLTF
+  
     let intersects = raycaster.intersectObjects(floorItems, true); 
     
     let targetFloorY = 1; 
@@ -469,8 +465,7 @@ function update() {
             return;
         } 
         
-        // Buscamos si el objeto impactado pertenece a uno de nuestros obstáculos
-        // (Subimos por la jerarquía del modelo 3D hasta encontrar el padre en la lista)
+        
         let parent = hitObject;
         while (parent) {
             if (obstacles.includes(parent)) {
@@ -480,11 +475,11 @@ function update() {
             parent = parent.parent;
         }
 
-        // Ajustamos la altura de destino al punto exacto del impacto + offset del personaje
+        
         targetFloorY = intersects[0].point.y + 1; 
     }
 
-    // 3. GRAVEDAD Y SALTO
+    //GRAVEDAD Y SALTO
     player.position.y += velocityY;
     if (player.position.y > targetFloorY) {
         velocityY -= gravity; 
@@ -494,9 +489,11 @@ function update() {
         isJumping = false;
     }
 
-    // 4. CAJAS DE COLISIÓN DEL JUGADOR
+    //CAJAS DE COLISIÓN DEL JUGADOR
+
+
     /*let playerBoxFront = new THREE.Box3().setFromObject(player);
-    playerBoxFront.min.y += 1.2; // Subimos el margen de daño para no tocar el techo que pisamos
+    playerBoxFront.min.y += 1.2; 
     playerBoxFront.expandByScalar(-0.1); 
     let playerBoxFull = new THREE.Box3().setFromObject(player); */
 
@@ -506,7 +503,7 @@ function update() {
     );
     let playerBoxFront = playerBoxFull.clone().expandByScalar(-0.2);
 
-    // 5. EFECTO DE INVULNERABILIDAD Y CÁMARA
+    // EFECTO DE INVULNERABILIDAD Y CÁMARA
     if (invulnerableTimer > 0) {
         invulnerableTimer--;
         player.visible = (invulnerableTimer % 10 < 5); 
@@ -518,25 +515,25 @@ function update() {
         }
     }
 
-    // 6. GESTIÓN DE OBSTÁCULOS (CON CLÁUSULA DE INMUNIDAD)
+    // GESTIÓN DE OBSTÁCULOS
     for (let i = obstacles.length - 1; i >= 0; i--) {
         let obs = obstacles[i];
         obs.position.z += velocidadJuego;
 
-        // REGLA DE ORO: Si es el objeto que estamos pisando, ignoramos el daño lateral
+        // Si es el objeto que estamos pisando, ignoramos el daño lateral
         if (obs === objetoPisado) continue;
 
         let obsBox = new THREE.Box3().setFromObject(obs);
 
         if (playerBoxFront.intersectsBox(obsBox)) {
-            // Margen de seguridad: Solo daño si estamos claramente por debajo del tope
+            
             if (player.position.y < obsBox.max.y - 0.4) {
                 if (invulnerableTimer <= 0) {
                     vidas--;
                     livesText.innerText = vidas;
                     invulnerableTimer = 60;
                     
-                    // Eliminamos para evitar múltiples impactos en un mismo frame
+                    
                     scene.remove(obs);
                     obstacles.splice(i, 1);
                     
@@ -549,7 +546,7 @@ function update() {
         }
     }
 
-    // 7. FOSOS
+    //FOSOS
     for (let i = pits.length - 1; i >= 0; i--) {
         let pit = pits[i];
         pit.position.z += velocidadJuego;
@@ -559,7 +556,7 @@ function update() {
         }
     }
 
-    // 8. ITEMS Y MONEDAS (Sin cambios)
+    //ITEMS Y MONEDAS
     for (let i = extraLives.length - 1; i >= 0; i--) {
         let lifeItem = extraLives[i];
         lifeItem.position.z += velocidadJuego;
@@ -590,7 +587,7 @@ function update() {
         }
     }
 
-    // 9. GENERACIÓN Y DIFICULTAD
+    //GENERACIÓN Y DIFICULTAD
     framesSinceLastSpawn++;
     let spawnRate = Math.max(30, Math.floor(120 - (velocidadJuego * 25))); 
     if (framesSinceLastSpawn > spawnRate) {
