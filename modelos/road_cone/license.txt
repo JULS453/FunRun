@@ -1,0 +1,11 @@
+Model Information:
+* title:	Road Cone
+* source:	https://sketchfab.com/3d-models/road-cone-29245fb4354e492b8e6bcf88f202737a
+* author:	Emil Gilmutdinov (https://sketchfab.com/Emil_Gilmutdinov)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Road Cone" (https://sketchfab.com/3d-models/road-cone-29245fb4354e492b8e6bcf88f202737a) by Emil Gilmutdinov (https://sketchfab.com/Emil_Gilmutdinov) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

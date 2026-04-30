@@ -1,0 +1,11 @@
+Model Information:
+* title:	Traffic Barrier
+* source:	https://sketchfab.com/3d-models/traffic-barrier-493f54add91748a698f449db3cdb16c5
+* author:	Shaaaark (https://sketchfab.com/Shaaaark)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Traffic Barrier" (https://sketchfab.com/3d-models/traffic-barrier-493f54add91748a698f449db3cdb16c5) by Shaaaark (https://sketchfab.com/Shaaaark) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

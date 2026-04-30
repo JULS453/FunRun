@@ -1,0 +1,11 @@
+Model Information:
+* title:	T wall barrier
+* source:	https://sketchfab.com/3d-models/t-wall-barrier-11f4ab1032904f66991a16c32e35f79a
+* author:	NonoG5 (https://sketchfab.com/NonoG5)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "T wall barrier" (https://sketchfab.com/3d-models/t-wall-barrier-11f4ab1032904f66991a16c32e35f79a) by NonoG5 (https://sketchfab.com/NonoG5) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
